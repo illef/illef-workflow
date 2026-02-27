@@ -1,0 +1,52 @@
+[package]
+name = "illef-workflow"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "illef-workflow-runner"
+path = "src/bin/runner.rs"
+
+[[bin]]
+name = "illef-workflow-tui"
+path = "src/bin/tui.rs"
+
+[dependencies]
+# async
+tokio = { version = "1", features = ["full"] }
+
+# gRPC
+tonic = { version = "0.12", features = ["transport"] }
+prost = "0.13"
+
+# config
+serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.9"
+
+# DB
+rusqlite = { version = "0.32", features = ["bundled"] }
+
+# cron
+cron = "0.12"
+chrono = { version = "0.4", features = ["serde"] }
+
+# file watching (inotify)
+notify = "6"
+
+# TUI
+ratatui = "0.29"
+crossterm = "0.28"
+
+# logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# util
+anyhow = "1"
+uuid = { version = "1", features = ["v4"] }
+tokio-stream = "0.1"
+tower = "0.4"
+hyper-util = { version = "0.1", features = ["tokio"] }
+
+[build-dependencies]
+tonic-build = "0.12"

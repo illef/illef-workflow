@@ -1,0 +1,12 @@
+[Unit]
+Description=illef-workflow runner
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/illef-workflow-runner
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

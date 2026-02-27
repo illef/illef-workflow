@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package workflow;
+
+service WorkflowService {
+    rpc ListWorkflows(Empty) returns (ListWorkflowsResponse);
+    rpc GetWorkflowStatus(WorkflowRequest) returns (WorkflowStatusResponse);
+    rpc GetExecutionLogPath(ExecutionRequest) returns (LogPathResponse);
+    rpc TriggerWorkflow(WorkflowRequest) returns (TriggerResponse);
+}
+
+message Empty {}
+
+message WorkflowRequest {
+    string name = 1;
+}
+
+message ExecutionRequest {
+    string execution_id = 1;
+}
+
+message WorkflowInfo {
+    string name = 1;
+    string cron = 2;
+    string script = 3;
+    string status = 4;          // idle | running
+    int64 next_run_at = 5;      // unix timestamp (seconds), 0 if unknown
+    int64 last_run_at = 6;      // unix timestamp (seconds), 0 if none
+    string last_run_status = 7; // success | failed | ""
+}
+
+message ListWorkflowsResponse {
+    repeated WorkflowInfo workflows = 1;
+}
+
+message ExecutionInfo {
+    string id = 1;
+    string workflow = 2;
+    string status = 3;          // running | success | failed
+    int64 started_at = 4;
+    int64 finished_at = 5;      // 0 if still running
+    int32 exit_code = 6;        // -1 if still running
+    string log_path = 7;
+}
+
+message WorkflowStatusResponse {
+    WorkflowInfo workflow = 1;
+    repeated ExecutionInfo executions = 2;
+}
+
+message LogPathResponse {
+    string log_path = 1;
+}
+
+message TriggerResponse {
+    bool queued = 1;    // true: 실행 중이라 queue에 추가됨, false: 즉시 실행
+    string message = 2;
+}
